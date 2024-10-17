@@ -7,9 +7,21 @@ import { AppController } from './app.controller';
 import { HttpCustomModule } from './shared/http/http.module';
 import { MicroBlockchainModule } from './modules/micro-blockchain/micro-blockchain.module';
 import { MicroCoreModule } from './modules/micro-core/micro-core.module';
+import { ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
-  imports: [CacheModule.register({ isGlobal: true }), HttpCustomModule, MicroBlockchainModule, MicroCoreModule],
+  imports: [
+    CacheModule.register({ isGlobal: true }),
+    ThrottlerModule.forRoot([
+      {
+        ttl: 60000,
+        limit: 10,
+      },
+    ]),
+    HttpCustomModule,
+    MicroBlockchainModule,
+    MicroCoreModule,
+  ],
   controllers: [AppController],
   providers: [],
 })
