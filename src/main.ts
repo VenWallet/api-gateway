@@ -15,11 +15,11 @@ async function bootstrap() {
   app.use(morgan('dev'));
   app.enableCors();
 
-  app.setGlobalPrefix('/api');
+  app.setGlobalPrefix('/api/v1');
 
   const config = new DocumentBuilder()
     .setTitle('API Gateway v1')
-    .setDescription('API Gateway v1 Documentation')
+    .setDescription('API Gateway Documentation')
     .setVersion('1.0')
     .build();
 
