@@ -15,7 +15,7 @@ async function bootstrap() {
   app.use(morgan('dev'));
   app.enableCors();
 
-  app.setGlobalPrefix('/api/v1');
+  app.setGlobalPrefix('/venwallet/api/v1');
 
   const config = new DocumentBuilder()
     .setTitle('API Gateway v1')
@@ -24,7 +24,7 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api/swagger', app, document);
+  SwaggerModule.setup('venwallet/api/swagger-v1', app, document);
 
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
   app.useGlobalInterceptors(new ResponseInterceptor());
