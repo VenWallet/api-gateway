@@ -15,7 +15,7 @@ async function bootstrap() {
   app.use(morgan('dev'));
   app.enableCors();
 
-  app.setGlobalPrefix('venwallet/api/v4');
+  app.setGlobalPrefix('venwallet/api/v1');
 
   const config = new DocumentBuilder()
     .setTitle('API Gateway v1')
