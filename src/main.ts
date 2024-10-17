@@ -15,7 +15,7 @@ async function bootstrap() {
   app.use(morgan('dev'));
   app.enableCors();
 
-  app.setGlobalPrefix('/api/v3');
+  app.setGlobalPrefix('/api/v1');
 
   const config = new DocumentBuilder()
     .setTitle('API Gateway v1')
