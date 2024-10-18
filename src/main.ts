@@ -18,7 +18,7 @@ async function bootstrap() {
   app.setGlobalPrefix('/venwallet/api/v1');
 
   const config = new DocumentBuilder()
-    .setTitle('API Gateway V1 TEST')
+    .setTitle(`API Gateway V1 - ${process.env.NODE_ENV}`)
     .setDescription('API Gateway Documentation')
     .setVersion('1.0')
     .build();
