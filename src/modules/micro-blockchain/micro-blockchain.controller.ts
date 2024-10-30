@@ -73,7 +73,7 @@ export class MicroBlockchainController {
   async getBalance(
     @Param('userId') userId: string,
     @Query('network') network?: string,
-    @Query('hasBalance', new BooleanValidationPipe()) hasBalance?: boolean,
+    @Query('hasBalance', new BooleanValidationPipe()) hasBalance?: boolean | string,
   ) {
     try {
       const config: AxiosRequestConfig = {
