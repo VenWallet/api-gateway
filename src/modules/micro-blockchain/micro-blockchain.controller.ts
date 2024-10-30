@@ -15,13 +15,14 @@ import {
   Param,
   Query,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { ExceptionHandler } from 'src/helpers/handlers/exception.handler';
 import { AuthGuard } from 'src/helpers/guards/auth.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { HttpClient } from 'src/shared/http/http.client';
 import { IsAddressDto, TransferDto, TransferTokenDto } from './dto/micro-blockchain.dto';
 import { AxiosRequestConfig } from 'axios';
+import { BooleanValidationPipe } from 'src/helpers/pipes/boolean-validate.pipe';
 
 @ApiTags('micro-blockchain')
 @Controller()
@@ -66,12 +67,19 @@ export class MicroBlockchainController {
   }
 
   @Get('balance/:userId')
-  @ApiOperation({ description: 'balance description' })
-  async getBalance(@Param('userId') userId: string, @Query('network') network: string) {
+  @ApiOperation({ description: 'Balance endpoint with optional filter by balance status' })
+  @ApiQuery({ name: 'network', type: String, required: false, description: 'Network identifier' })
+  @ApiQuery({ name: 'hasBalance', type: Boolean, required: false, description: 'Filter by balance status' })
+  async getBalance(
+    @Param('userId') userId: string,
+    @Query('network') network?: string,
+    @Query('hasBalance', new BooleanValidationPipe()) hasBalance?: boolean,
+  ) {
     try {
       const config: AxiosRequestConfig = {
         params: {
           network,
+          hasBalance,
         },
       };
 
@@ -88,6 +96,9 @@ export class MicroBlockchainController {
   }
 
   @Get('balance-token/:userId')
+  @ApiOperation({ description: 'Get balance for a specific token' })
+  @ApiQuery({ name: 'network', type: String, required: true, description: 'Network identifier' })
+  @ApiQuery({ name: 'token', type: String, required: true, description: 'Token identifier' })
   async getBalanceToken(
     @Param('userId') userId: string,
     @Query('network') network: string,
