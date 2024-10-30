@@ -68,18 +68,12 @@ export class MicroBlockchainController {
 
   @Get('balance/:userId')
   @ApiOperation({ description: 'Balance endpoint with optional filter by balance status' })
-  @ApiQuery({ name: 'network', type: String, required: false, description: 'Network identifier' })
-  @ApiQuery({ name: 'hasBalance', type: Boolean, required: false, description: 'Filter by balance status' })
-  async getBalance(
-    @Param('userId') userId: string,
-    @Query('network') network?: string,
-    @Query('hasBalance', new BooleanValidationPipe()) hasBalance?: boolean | string,
-  ) {
+  @ApiQuery({ name: 'network', type: String, required: true, description: 'Network identifier' })
+  async getBalance(@Param('userId') userId: string, @Query('network') network: string) {
     try {
       const config: AxiosRequestConfig = {
         params: {
           network,
-          hasBalance,
         },
       };
 
@@ -125,11 +119,22 @@ export class MicroBlockchainController {
   }
 
   @Get('balances/:userId')
-  async getBalances(@Param('userId') userId: string) {
+  @ApiQuery({ name: 'hasBalance', type: Boolean, required: false, description: 'Filter by have balance' })
+  async getBalances(
+    @Param('userId') userId: string,
+    @Query('hasBalance', new BooleanValidationPipe()) hasBalance?: boolean | string,
+  ) {
     try {
+      const config: AxiosRequestConfig = {
+        params: {
+          hasBalance,
+        },
+      };
+
       const { data } = await this.httpClient.request({
         method: 'GET',
         path: `blockchain/balances/${userId}`,
+        config,
       });
 
       return data;
