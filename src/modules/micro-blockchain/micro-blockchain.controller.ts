@@ -144,6 +144,7 @@ export class MicroBlockchainController {
   }
 
   @Post('transfer')
+  @ApiOperation({ description: 'Transfer endpoint' })
   @HttpCode(HttpStatus.OK)
   async transfer(@Body() body: TransferDto) {
     try {
