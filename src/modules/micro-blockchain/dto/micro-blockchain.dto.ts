@@ -15,7 +15,7 @@ export class IsAddressDto {
 }
 
 export class TransferDto {
-  // @ApiProperty()
+  @ApiProperty()
   @IsUUID()
   @IsNotEmpty()
   userId: string;
@@ -42,7 +42,7 @@ export class TransferDto {
 }
 
 export class TransferTokenDto {
-  // @ApiProperty()
+  @ApiProperty()
   @IsUUID()
   @IsNotEmpty()
   userId: string;

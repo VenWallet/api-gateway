@@ -145,7 +145,6 @@ export class MicroBlockchainController {
 
   @Post('transfer')
   @HttpCode(HttpStatus.OK)
-  @UseGuards(AuthGuard)
   async transfer(@Body() body: TransferDto) {
     try {
       const { data } = await this.httpClient.request({
@@ -162,7 +161,6 @@ export class MicroBlockchainController {
 
   @Post('transfer-token')
   @HttpCode(HttpStatus.OK)
-  @UseGuards(AuthGuard)
   async transferToken(@Body() body: TransferTokenDto) {
     try {
       const { data } = await this.httpClient.request({
@@ -179,7 +177,6 @@ export class MicroBlockchainController {
 
   @Post('preview-swap')
   @HttpCode(HttpStatus.OK)
-  @UseGuards(AuthGuard)
   async previewSwap(@Body() body: PreviewSwapDto) {
     try {
       const { data } = await this.httpClient.request({
@@ -196,7 +193,6 @@ export class MicroBlockchainController {
 
   @Post('swap')
   @HttpCode(HttpStatus.OK)
-  @UseGuards(AuthGuard)
   async swap(@Body() body: SwapDto) {
     try {
       const { data } = await this.httpClient.request({
