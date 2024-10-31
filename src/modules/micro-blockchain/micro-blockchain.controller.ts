@@ -20,7 +20,7 @@ import { ExceptionHandler } from 'src/helpers/handlers/exception.handler';
 import { AuthGuard } from 'src/helpers/guards/auth.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { HttpClient } from 'src/shared/http/http.client';
-import { IsAddressDto, TransferDto, TransferTokenDto } from './dto/micro-blockchain.dto';
+import { IsAddressDto, PreviewSwapDto, SwapDto, TransferDto, TransferTokenDto } from './dto/micro-blockchain.dto';
 import { AxiosRequestConfig } from 'axios';
 import { BooleanValidationPipe } from 'src/helpers/pipes/boolean-validate.pipe';
 
@@ -168,6 +168,40 @@ export class MicroBlockchainController {
       const { data } = await this.httpClient.request({
         method: 'POST',
         path: `blockchain/transfer-token`,
+        body,
+      });
+
+      return data;
+    } catch (error) {
+      throw new ExceptionHandler(error);
+    }
+  }
+
+  @Post('preview-swap')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthGuard)
+  async previewSwap(@Body() body: PreviewSwapDto) {
+    try {
+      const { data } = await this.httpClient.request({
+        method: 'POST',
+        path: `blockchain/preview-swap`,
+        body,
+      });
+
+      return data;
+    } catch (error) {
+      throw new ExceptionHandler(error);
+    }
+  }
+
+  @Post('swap')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthGuard)
+  async swap(@Body() body: SwapDto) {
+    try {
+      const { data } = await this.httpClient.request({
+        method: 'POST',
+        path: `blockchain/swap`,
         body,
       });
 

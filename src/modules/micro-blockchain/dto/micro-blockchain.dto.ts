@@ -72,3 +72,64 @@ export class TransferTokenDto {
   @IsString()
   token: string;
 }
+
+export class PreviewSwapDto {
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  userId: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  fromCoin: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  toCoin: string;
+
+  @ApiProperty()
+  @IsNumber()
+  amount: number;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  network: string;
+}
+
+export class SwapDto {
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  userId: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  priceRoute: any;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  pkEncrypt: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  network: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  fromCoin: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  toCoin: string;
+
+  @ApiProperty()
+  @IsNumber()
+  amount: number;
+}
