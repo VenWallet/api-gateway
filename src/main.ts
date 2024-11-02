@@ -21,6 +21,7 @@ async function bootstrap() {
     .setTitle(`API Gateway V1 - ${process.env.NODE_ENV}`)
     .setDescription('API Gateway Documentation')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

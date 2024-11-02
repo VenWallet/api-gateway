@@ -75,7 +75,7 @@ export class TransferTokenDto {
 }
 
 export class PreviewSwapDto {
-  @ApiProperty()
+  // @ApiProperty()
   @IsString()
   @IsNotEmpty()
   userId: string;
@@ -148,21 +148,21 @@ export class PriceRouteDto {
 }
 
 export class SwapDto {
-  @ApiProperty()
+  // @ApiProperty()
   @IsString()
   @IsNotEmpty()
   userId: string;
+
+  // @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  mnemonic: string;
 
   @ApiProperty({ type: PriceRouteDto })
   @IsNotEmpty()
   @ValidateNested()
   @Type(() => PriceRouteDto)
   priceRoute: PriceRouteDto;
-
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  pkEncrypt: string;
 
   @ApiProperty()
   @IsNotEmpty()

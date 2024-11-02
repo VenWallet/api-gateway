@@ -118,10 +118,13 @@ export class MicroBlockchainController {
     }
   }
 
-  @Get('balances/:userId')
+  // @Get('balances/:userId')
+  @Get('balances')
   @ApiQuery({ name: 'hasBalance', type: Boolean, required: false, description: 'Filter by have balance' })
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
   async getBalances(
-    @Param('userId') userId: string,
+    @Body('userId') userId: string,
     @Query('hasBalance', new BooleanValidationPipe()) hasBalance?: boolean | string,
   ) {
     try {
@@ -178,6 +181,8 @@ export class MicroBlockchainController {
 
   @Post('preview-swap')
   @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
   async previewSwap(@Body() body: PreviewSwapDto) {
     try {
       const { data } = await this.httpClient.request({
@@ -194,6 +199,8 @@ export class MicroBlockchainController {
 
   @Post('swap')
   @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
   async swap(@Body() body: SwapDto) {
     try {
       const { data } = await this.httpClient.request({

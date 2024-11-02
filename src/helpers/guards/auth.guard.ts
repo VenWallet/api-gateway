@@ -11,33 +11,40 @@ export class AuthGuard implements CanActivate {
   constructor(private readonly httpService: HttpCustomService) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const request = context.switchToHttp().getRequest<Request>();
-    const mnemonic = request.body.mnemonic || undefined;
+    const req = context.switchToHttp().getRequest();
+    const authHeader = req.headers.authorization;
 
-    if (!mnemonic) {
-      throw new UnauthorizedException('Mnemonic not found');
+    if (!authHeader) {
+      return false;
+    }
+
+    const [bearer, token] = authHeader.split(' ');
+
+    if (bearer !== 'Bearer' || !token) {
+      return false;
     }
 
     try {
       const response = await this.httpService.request<any>({
         method: 'POST',
-        url: 'http://micro-blockchain:3000/api/wallet/get-user-id-by-mnemonic',
-        body: { mnemonic },
+        url: 'http://micro-core:3000/api/auth/check-user',
+        config: {
+          headers: {
+            Authorization: authHeader,
+          },
+        },
       });
 
       if (!response.data) {
         throw new UnauthorizedException('User not found');
       }
 
-      const { userId } = response.data;
-
-      request['user'] = { id: userId };
-
-      request.body.userId = userId;
+      req.body.mnemonic = response.data.mnemonic;
+      req.body.userId = response.data.userId;
 
       return true;
     } catch (error) {
-      throw new UnauthorizedException('Invalid token');
+      return false;
     }
   }
 }

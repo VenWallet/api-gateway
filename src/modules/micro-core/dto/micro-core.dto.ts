@@ -24,16 +24,16 @@ export class CreateUserDto {
   mnemonic: string;
 }
 
-export class ImportUserDto {
+export class ImportUserFromMnemonicDto {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
   mnemonic: string;
 
   // @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  userId: string;
+  // @IsString()
+  // @IsNotEmpty()
+  // userId: string;
 }
 
 export class UpdateUserDto extends PartialType(CreateUserDto) {}
