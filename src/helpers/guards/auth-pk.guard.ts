@@ -7,7 +7,7 @@ import { HttpCustomService } from 'src/shared/http/http.service';
 dotenv.config();
 
 @Injectable()
-export class AuthGuard implements CanActivate {
+export class AuthPkGuard implements CanActivate {
   constructor(private readonly httpService: HttpCustomService) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -39,7 +39,23 @@ export class AuthGuard implements CanActivate {
         throw new UnauthorizedException('User not found');
       }
 
-      req.body.userId = response.data.userId;
+      if (response.data.loginMethod === 'MNEMONIC') {
+        const credential = response.data.credendials.find((c) => c.index === req.body.network);
+        if (!credential) {
+          throw new UnauthorizedException('Credential not found');
+        }
+        req.body.privateKey = credential.privateKey;
+        req.body.userId = response.data.userId;
+      } else if (response.data.loginMethod === 'PRIVATE_KEY') {
+        req.body.privateKey = response.data.privateKey;
+        req.body.userId = response.data.userId;
+      } else {
+        throw new UnauthorizedException('Login method not found');
+      }
+
+      if (!req.body.privateKey || !req.body.userId) {
+        throw new UnauthorizedException('Private key or user id not found');
+      }
 
       return true;
     } catch (error) {

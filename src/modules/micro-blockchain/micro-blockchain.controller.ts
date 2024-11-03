@@ -23,6 +23,7 @@ import { HttpClient } from 'src/shared/http/http.client';
 import { IsAddressDto, PreviewSwapDto, SwapDto, TransferDto, TransferTokenDto } from './dto/micro-blockchain.dto';
 import { AxiosRequestConfig } from 'axios';
 import { BooleanValidationPipe } from 'src/helpers/pipes/boolean-validate.pipe';
+import { AuthPkGuard } from 'src/helpers/guards/auth-pk.guard';
 
 @ApiTags('micro-blockchain')
 @Controller()
@@ -66,10 +67,12 @@ export class MicroBlockchainController {
     }
   }
 
-  @Get('balance/:userId')
+  @Get('balance')
   @ApiOperation({ description: 'Balance endpoint with optional filter by balance status' })
   @ApiQuery({ name: 'network', type: String, required: true, description: 'Network identifier' })
-  async getBalance(@Param('userId') userId: string, @Query('network') network: string) {
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  async getBalance(@Body('userId') userId: string, @Query('network') network: string) {
     try {
       const config: AxiosRequestConfig = {
         params: {
@@ -89,12 +92,14 @@ export class MicroBlockchainController {
     }
   }
 
-  @Get('balance-token/:userId')
+  @Get('balance-token')
   @ApiOperation({ description: 'Get balance for a specific token' })
   @ApiQuery({ name: 'network', type: String, required: true, description: 'Network identifier' })
   @ApiQuery({ name: 'token', type: String, required: true, description: 'Token identifier' })
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
   async getBalanceToken(
-    @Param('userId') userId: string,
+    @Body('userId') userId: string,
     @Query('network') network: string,
     @Query('token') token: string,
   ) {
@@ -149,6 +154,8 @@ export class MicroBlockchainController {
   @Post('transfer')
   @ApiOperation({ description: 'Transfer endpoint' })
   @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthPkGuard)
+  @ApiBearerAuth()
   async transfer(@Body() body: TransferDto) {
     try {
       const { data } = await this.httpClient.request({
@@ -165,6 +172,8 @@ export class MicroBlockchainController {
 
   @Post('transfer-token')
   @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthPkGuard)
+  @ApiBearerAuth()
   async transferToken(@Body() body: TransferTokenDto) {
     try {
       const { data } = await this.httpClient.request({
@@ -199,7 +208,7 @@ export class MicroBlockchainController {
 
   @Post('swap')
   @HttpCode(HttpStatus.OK)
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthPkGuard)
   @ApiBearerAuth()
   async swap(@Body() body: SwapDto) {
     try {

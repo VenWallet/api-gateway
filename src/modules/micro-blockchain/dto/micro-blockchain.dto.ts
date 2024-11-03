@@ -16,15 +16,15 @@ export class IsAddressDto {
 }
 
 export class TransferDto {
-  @ApiProperty()
+  // @ApiProperty()
   @IsUUID()
   @IsNotEmpty()
   userId: string;
 
-  @ApiProperty()
+  // @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  pkEncrypt: string;
+  privateKey: string;
 
   @ApiProperty()
   @IsNotEmpty()
@@ -43,15 +43,15 @@ export class TransferDto {
 }
 
 export class TransferTokenDto {
-  @ApiProperty()
+  // @ApiProperty()
   @IsUUID()
   @IsNotEmpty()
   userId: string;
 
-  @ApiProperty()
+  // @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  pkEncrypt: string;
+  privateKey: string;
 
   @ApiProperty()
   @IsNotEmpty()
@@ -156,7 +156,7 @@ export class SwapDto {
   // @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  mnemonic: string;
+  privateKey: string;
 
   @ApiProperty({ type: PriceRouteDto })
   @IsNotEmpty()
