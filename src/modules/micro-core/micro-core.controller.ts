@@ -86,4 +86,20 @@ export class MicroCoreController {
       throw new ExceptionHandler(error);
     }
   }
+
+  @Get('movement')
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  async getBalances(@Body('userId') userId: string) {
+    try {
+      const { data } = await this.httpClient.request({
+        method: 'GET',
+        path: `movement/${userId}`,
+      });
+
+      return data;
+    } catch (error) {
+      throw new ExceptionHandler(error);
+    }
+  }
 }
