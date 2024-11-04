@@ -69,8 +69,12 @@ export class MicroCoreController {
   @Post('/auth/import-from-mnemonic')
   @ApiOperation({ description: 'user import description' })
   @HttpCode(HttpStatus.OK)
-  async importUserFromMnemonic(@Body() body: ImportUserFromMnemonicDto) {
+  async importUserFromMnemonic(@Body() body: ImportUserFromMnemonicDto, @Req() req: Request) {
     try {
+      const clientIp = (req as any).ip;
+
+      console.log('IP del cliente:', clientIp);
+
       const { data } = await this.httpClient.request({
         method: 'POST',
         path: `auth/import-from-mnemonic`,
