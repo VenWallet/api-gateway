@@ -18,6 +18,8 @@ export class AuthPkGuard implements CanActivate {
       return false;
     }
 
+    console.log('authHeader', authHeader);
+
     const [bearer, token] = authHeader.split(' ');
 
     if (bearer !== 'Bearer' || !token) {
@@ -35,12 +37,14 @@ export class AuthPkGuard implements CanActivate {
         },
       });
 
+      console.log('response', response.data);
+
       if (!response.data) {
         throw new UnauthorizedException('User not found');
       }
 
       if (response.data.loginMethod === 'MNEMONIC') {
-        const credential = response.data.credendials.find((c) => c.index === req.body.network);
+        const credential = response.data.credentials.find((c) => c.index === req.body.network);
         if (!credential) {
           throw new UnauthorizedException('Credential not found');
         }
@@ -59,6 +63,7 @@ export class AuthPkGuard implements CanActivate {
 
       return true;
     } catch (error) {
+      console.log('error', error);
       return false;
     }
   }
