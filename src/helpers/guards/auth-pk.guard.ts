@@ -18,8 +18,6 @@ export class AuthPkGuard implements CanActivate {
       return false;
     }
 
-    console.log('authHeader', authHeader);
-
     const [bearer, token] = authHeader.split(' ');
 
     if (bearer !== 'Bearer' || !token) {
@@ -36,8 +34,6 @@ export class AuthPkGuard implements CanActivate {
           },
         },
       });
-
-      console.log('response', response.data);
 
       if (!response.data) {
         throw new UnauthorizedException('User not found');
@@ -63,7 +59,6 @@ export class AuthPkGuard implements CanActivate {
 
       return true;
     } catch (error) {
-      console.log('error', error);
       return false;
     }
   }
