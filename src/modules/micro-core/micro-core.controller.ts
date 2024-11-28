@@ -18,7 +18,7 @@ import { ExceptionHandler } from 'src/helpers/handlers/exception.handler';
 import { AuthGuard } from 'src/helpers/guards/auth.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { HttpClient } from 'src/shared/http/http.client';
-import { CreateUserDto, ImportUserFromMnemonicDto } from './dto/micro-core.dto';
+import { CreateUserDto, GenerateOtpDto, ImportUserFromMnemonicDto, ValidateOtpDto } from './dto/micro-core.dto';
 
 @ApiTags('micro-core')
 @Controller()
@@ -99,6 +99,38 @@ export class MicroCoreController {
       const { data } = await this.httpClient.request({
         method: 'GET',
         path: `movement/${userId}`,
+      });
+
+      return data;
+    } catch (error) {
+      throw new ExceptionHandler(error);
+    }
+  }
+
+  @Post('user/generate-otp')
+  @HttpCode(HttpStatus.OK)
+  async generateOtp(@Body() body: GenerateOtpDto) {
+    try {
+      const { data } = await this.httpClient.request({
+        method: 'POST',
+        path: `user/generate-otp`,
+        body,
+      });
+
+      return data;
+    } catch (error) {
+      throw new ExceptionHandler(error);
+    }
+  }
+
+  @Post('user/validate-otp')
+  @HttpCode(HttpStatus.OK)
+  async validateOtp(@Body() body: ValidateOtpDto) {
+    try {
+      const { data } = await this.httpClient.request({
+        method: 'POST',
+        path: `user/validate-otp`,
+        body,
       });
 
       return data;
