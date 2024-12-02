@@ -20,7 +20,15 @@ import { ExceptionHandler } from 'src/helpers/handlers/exception.handler';
 import { AuthGuard } from 'src/helpers/guards/auth.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { HttpClient } from 'src/shared/http/http.client';
-import { IsAddressDto, PreviewSwapDto, SwapDto, TransferDto, TransferTokenDto } from './dto/micro-blockchain.dto';
+import {
+  CreateSpotMarketDto,
+  IsAddressDto,
+  PreviewSpotMarketDto,
+  PreviewSwapDto,
+  SwapDto,
+  TransferDto,
+  TransferTokenDto,
+} from './dto/micro-blockchain.dto';
 import { AxiosRequestConfig } from 'axios';
 import { BooleanValidationPipe } from 'src/helpers/pipes/boolean-validate.pipe';
 import { AuthPkGuard } from 'src/helpers/guards/auth-pk.guard';
@@ -215,6 +223,42 @@ export class MicroBlockchainController {
       const { data } = await this.httpClient.request({
         method: 'POST',
         path: `blockchain/swap`,
+        body,
+      });
+
+      return data;
+    } catch (error) {
+      throw new ExceptionHandler(error);
+    }
+  }
+
+  @Post('preview-spot-market')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  async previewSpotMarket(@Body() body: PreviewSpotMarketDto) {
+    try {
+      const { data } = await this.httpClient.request({
+        method: 'POST',
+        path: `blockchain/preview-spot-market`,
+        body,
+      });
+
+      return data;
+    } catch (error) {
+      throw new ExceptionHandler(error);
+    }
+  }
+
+  @Post('create-spot-market')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthPkGuard)
+  @ApiBearerAuth()
+  async createSpotMarket(@Body() body: CreateSpotMarketDto) {
+    try {
+      const { data } = await this.httpClient.request({
+        method: 'POST',
+        path: `blockchain/create-spot-market`,
         body,
       });
 

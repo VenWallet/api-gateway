@@ -1,7 +1,7 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsString, IsNotEmpty, IsUUID, IsEnum, IsNumber, ValidateNested, IsArray } from 'class-validator';
+import { IsString, IsNotEmpty, IsUUID, IsEnum, IsNumber, ValidateNested, IsArray, Min } from 'class-validator';
 
 export class IsAddressDto {
   @ApiProperty()
@@ -168,4 +168,49 @@ export class SwapDto {
   @IsNotEmpty()
   @IsString()
   network: string;
+}
+
+export class PreviewSpotMarketDto {
+  // @ApiProperty()
+  @IsUUID()
+  @IsNotEmpty()
+  userId: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  typeOrder: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  fromNetwork: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  toNetwork: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  fromCoin: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  toCoin: string;
+
+  @ApiProperty()
+  @IsNumber()
+  @IsNotEmpty()
+  @Min(0.0000001, { message: 'The amount must be greater than 0' })
+  amount: number;
+}
+
+export class CreateSpotMarketDto extends PreviewSpotMarketDto {
+  // @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  privateKey: string;
 }
