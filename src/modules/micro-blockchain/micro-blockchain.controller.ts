@@ -240,7 +240,7 @@ export class MicroBlockchainController {
     try {
       const { data } = await this.httpClient.request({
         method: 'POST',
-        path: `blockchain/preview-spot-market`,
+        path: `spot-market/preview-spot-market`,
         body,
       });
 
@@ -258,7 +258,7 @@ export class MicroBlockchainController {
     try {
       const { data } = await this.httpClient.request({
         method: 'POST',
-        path: `blockchain/create-spot-market`,
+        path: `spot-market/create-spot-market`,
         body,
       });
 
