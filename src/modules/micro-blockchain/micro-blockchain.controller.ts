@@ -59,7 +59,7 @@ export class MicroBlockchainController {
   }
 
   @Get('tokens')
-  @ApiQuery({ description: 'Get Tokens' })
+  @ApiOperation({ description: 'getTokens description' })
   async getTokens() {
     try {
       const { data } = await this.httpClient.request({
