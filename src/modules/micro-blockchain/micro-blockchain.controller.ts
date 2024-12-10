@@ -58,6 +58,21 @@ export class MicroBlockchainController {
     }
   }
 
+  @Get('tokens')
+  @ApiQuery({ description: 'Get Tokens' })
+  async getTokens() {
+    try {
+      const { data } = await this.httpClient.request({
+        method: 'GET',
+        path: `blockchain/networks`,
+      });
+
+      return data;
+    } catch (error) {
+      throw new ExceptionHandler(error);
+    }
+  }
+
   @Post('is-address')
   @ApiOperation({ description: 'is address description' })
   @HttpCode(HttpStatus.OK)
