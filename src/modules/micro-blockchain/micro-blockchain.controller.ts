@@ -64,7 +64,7 @@ export class MicroBlockchainController {
     try {
       const { data } = await this.httpClient.request({
         method: 'GET',
-        path: `blockchain/networks`,
+        path: `networks`,
       });
 
       return data;
