@@ -40,7 +40,9 @@ export class AuthPkGuard implements CanActivate {
       }
 
       if (response.data.loginMethod === 'MNEMONIC') {
-        const credential = response.data.credentials.find((c) => c.index === req.body.network);
+        const credential = response.data.credentials.find(
+          (c) => c.index === (req.body?.network || req.body?.fromNetwork),
+        );
         if (!credential) {
           throw new UnauthorizedException('Credential not found');
         }
