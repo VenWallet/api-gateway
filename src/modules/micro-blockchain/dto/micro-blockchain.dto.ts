@@ -1,7 +1,17 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsString, IsNotEmpty, IsUUID, IsEnum, IsNumber, ValidateNested, IsArray, Min } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  IsUUID,
+  IsEnum,
+  IsNumber,
+  ValidateNested,
+  IsArray,
+  Min,
+  IsOptional,
+} from 'class-validator';
 
 export class IsAddressDto {
   @ApiProperty()
@@ -213,4 +223,58 @@ export class CreateSpotMarketDto extends PreviewSpotMarketDto {
   @IsString()
   @IsNotEmpty()
   privateKey: string;
+}
+
+export class CreatePosSettingsDto {
+  // @ApiProperty()
+  @IsUUID()
+  @IsNotEmpty()
+  userId: string;
+
+  @ApiProperty()
+  @IsUUID()
+  @IsOptional()
+  network: string;
+
+  @ApiProperty()
+  @IsUUID()
+  @IsOptional()
+  token: string;
+
+  @ApiProperty()
+  @IsUUID()
+  @IsOptional()
+  network_ext: string;
+
+  @ApiProperty()
+  @IsUUID()
+  @IsOptional()
+  token_ext: string;
+}
+
+export class UpdatePosSettingsDto {
+  // @ApiProperty()
+  @IsUUID()
+  @IsNotEmpty()
+  userId: string;
+
+  @ApiProperty()
+  @IsUUID()
+  @IsOptional()
+  network: string;
+
+  @ApiProperty()
+  @IsUUID()
+  @IsOptional()
+  token: string;
+
+  @ApiProperty()
+  @IsUUID()
+  @IsOptional()
+  network_ext: string;
+
+  @ApiProperty()
+  @IsUUID()
+  @IsOptional()
+  token_ext: string;
 }

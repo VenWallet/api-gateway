@@ -14,6 +14,8 @@ import {
   InternalServerErrorException,
   Param,
   Query,
+  BadRequestException,
+  Patch,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { ExceptionHandler } from 'src/helpers/handlers/exception.handler';
@@ -21,6 +23,7 @@ import { AuthGuard } from 'src/helpers/guards/auth.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { HttpClient } from 'src/shared/http/http.client';
 import {
+  CreatePosSettingsDto,
   CreateSpotMarketDto,
   IsAddressDto,
   PreviewSpotMarketDto,
@@ -28,6 +31,7 @@ import {
   SwapDto,
   TransferDto,
   TransferTokenDto,
+  UpdatePosSettingsDto,
 } from './dto/micro-blockchain.dto';
 import { AxiosRequestConfig } from 'axios';
 import { BooleanValidationPipe } from 'src/helpers/pipes/boolean-validate.pipe';
@@ -275,6 +279,65 @@ export class MicroBlockchainController {
         method: 'POST',
         path: `spot-market/create-spot-market`,
         body,
+      });
+
+      return data;
+    } catch (error) {
+      throw new ExceptionHandler(error);
+    }
+  }
+
+  @Post('pos/settings')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  async createPosSettings(@Body() body: CreatePosSettingsDto) {
+    try {
+      const { data } = await this.httpClient.request({
+        method: 'POST',
+        path: `pos/settings`,
+        body,
+      });
+
+      return data;
+    } catch (error) {
+      throw new ExceptionHandler(error);
+    }
+  }
+
+  @Patch('pos/settings')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  async updatePosSettings(@Body() body: UpdatePosSettingsDto) {
+    try {
+      const { userId, ...restBody } = body;
+
+      if (!userId) {
+        throw new BadRequestException('userId is required');
+      }
+
+      const { data } = await this.httpClient.request({
+        method: 'PATCH',
+        path: `pos/settings/${userId}`,
+        body: restBody,
+      });
+
+      return data;
+    } catch (error) {
+      throw new ExceptionHandler(error);
+    }
+  }
+
+  @Get('pos/settings')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  async getPosSettings(@Body('userId') userId: string) {
+    try {
+      const { data } = await this.httpClient.request({
+        method: 'GET',
+        path: `pos/settings/${userId}`,
       });
 
       return data;
