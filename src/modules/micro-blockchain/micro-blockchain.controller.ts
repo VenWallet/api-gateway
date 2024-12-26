@@ -23,9 +23,11 @@ import { AuthGuard } from 'src/helpers/guards/auth.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { HttpClient } from 'src/shared/http/http.client';
 import {
+  CreatePaymentRequestDto,
   CreatePosSettingsDto,
   CreateSpotMarketDto,
   IsAddressDto,
+  PaymentRequestPayDto,
   PreviewSpotMarketDto,
   PreviewSwapDto,
   SwapDto,
@@ -329,15 +331,34 @@ export class MicroBlockchainController {
     }
   }
 
-  @Get('pos/settings')
+  @Post('pos/payment-request')
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
-  async getPosSettings(@Body('userId') userId: string) {
+  async createPaymentRequest(@Body() body: CreatePaymentRequestDto) {
     try {
       const { data } = await this.httpClient.request({
-        method: 'GET',
-        path: `pos/settings/${userId}`,
+        method: 'POST',
+        path: `pos/payment-request`,
+        body,
+      });
+
+      return data;
+    } catch (error) {
+      throw new ExceptionHandler(error);
+    }
+  }
+
+  @Post('pos/payment-request/pay')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthPkGuard)
+  @ApiBearerAuth()
+  async paymentRequestPay(@Body() body: PaymentRequestPayDto) {
+    try {
+      const { data } = await this.httpClient.request({
+        method: 'POST',
+        path: `pos/payment-request/pay`,
+        body,
       });
 
       return data;

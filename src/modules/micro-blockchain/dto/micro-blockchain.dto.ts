@@ -278,3 +278,44 @@ export class UpdatePosSettingsDto {
   @IsOptional()
   token_ext: string;
 }
+
+export class CreatePaymentRequestDto {
+  @IsUUID()
+  @IsNotEmpty()
+  userId: string;
+
+  @ApiProperty()
+  @IsUUID()
+  @IsOptional()
+  network: string;
+
+  @ApiProperty()
+  @IsUUID()
+  @IsOptional()
+  token: string;
+
+  @ApiProperty()
+  @IsNumber()
+  @IsNotEmpty()
+  amount: number;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  note: string;
+}
+
+export class PaymentRequestPayDto {
+  @IsUUID()
+  @IsNotEmpty()
+  userId: string;
+
+  @IsString()
+  @IsNotEmpty()
+  privateKey: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  paymentRequestId: string;
+}
