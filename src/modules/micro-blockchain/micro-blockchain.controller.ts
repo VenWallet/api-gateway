@@ -23,6 +23,7 @@ import { AuthGuard } from 'src/helpers/guards/auth.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { HttpClient } from 'src/shared/http/http.client';
 import {
+  ConnectPosLinkDto,
   CreatePaymentRequestDto,
   CreatePosLinkDto,
   CreatePosSettingsDto,
@@ -359,6 +360,24 @@ export class MicroBlockchainController {
       const { data } = await this.httpClient.request({
         method: 'POST',
         path: `pos/link`,
+        body,
+      });
+
+      return data;
+    } catch (error) {
+      throw new ExceptionHandler(error);
+    }
+  }
+
+  @Post('pos/link/connect')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  async connectPosLink(@Body() body: ConnectPosLinkDto) {
+    try {
+      const { data } = await this.httpClient.request({
+        method: 'POST',
+        path: `pos/link/connect`,
         body,
       });
 
