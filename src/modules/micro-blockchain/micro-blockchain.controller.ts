@@ -331,6 +331,23 @@ export class MicroBlockchainController {
     }
   }
 
+  @Get('pos/settings')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  async getPosSettings(@Body('userId') userId: string) {
+    try {
+      const { data } = await this.httpClient.request({
+        method: 'GET',
+        path: `pos/settings/${userId}`,
+      });
+
+      return data;
+    } catch (error) {
+      throw new ExceptionHandler(error);
+    }
+  }
+
   @Post('pos/payment-request')
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard)
