@@ -279,6 +279,42 @@ export class UpdatePosSettingsDto {
   token_ext: string;
 }
 
+export class CreatePosLinkDto {
+  @IsUUID()
+  @IsNotEmpty()
+  userId: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  title: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  description: string;
+}
+
+export class PosLinkDto extends CreatePosLinkDto {
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  image: string;
+}
+
+export class UpdatePosLinkDto extends PartialType(PosLinkDto) {}
+
+export class ConnectPosLinkDto {
+  @IsUUID()
+  @IsNotEmpty()
+  userId: string;
+
+  @ApiProperty()
+  @IsUUID()
+  @IsNotEmpty()
+  posLinkId: string;
+}
+
 export class CreatePaymentRequestDto {
   @IsUUID()
   @IsNotEmpty()

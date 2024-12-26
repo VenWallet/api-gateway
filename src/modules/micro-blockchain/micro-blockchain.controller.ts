@@ -24,6 +24,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { HttpClient } from 'src/shared/http/http.client';
 import {
   CreatePaymentRequestDto,
+  CreatePosLinkDto,
   CreatePosSettingsDto,
   CreateSpotMarketDto,
   IsAddressDto,
@@ -33,6 +34,7 @@ import {
   SwapDto,
   TransferDto,
   TransferTokenDto,
+  UpdatePosLinkDto,
   UpdatePosSettingsDto,
 } from './dto/micro-blockchain.dto';
 import { AxiosRequestConfig } from 'axios';
@@ -340,6 +342,65 @@ export class MicroBlockchainController {
       const { data } = await this.httpClient.request({
         method: 'GET',
         path: `pos/settings/${userId}`,
+      });
+
+      return data;
+    } catch (error) {
+      throw new ExceptionHandler(error);
+    }
+  }
+
+  @Post('pos/link')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  async createPosLink(@Body() body: CreatePosLinkDto) {
+    try {
+      const { data } = await this.httpClient.request({
+        method: 'POST',
+        path: `pos/link`,
+        body,
+      });
+
+      return data;
+    } catch (error) {
+      throw new ExceptionHandler(error);
+    }
+  }
+
+  @Patch('pos/link')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  async updatePosLink(@Body() body: UpdatePosLinkDto) {
+    try {
+      const { userId, ...restBody } = body;
+
+      if (!userId) {
+        throw new BadRequestException('userId is required');
+      }
+
+      const { data } = await this.httpClient.request({
+        method: 'PATCH',
+        path: `pos/link/${userId}`,
+        body: restBody,
+      });
+
+      return data;
+    } catch (error) {
+      throw new ExceptionHandler(error);
+    }
+  }
+
+  @Get('pos/link')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  async getPosLink(@Body('userId') userId: string) {
+    try {
+      const { data } = await this.httpClient.request({
+        method: 'GET',
+        path: `pos/link/${userId}`,
       });
 
       return data;
