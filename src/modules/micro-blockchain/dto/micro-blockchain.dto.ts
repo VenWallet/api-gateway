@@ -289,7 +289,7 @@ export class CreatePosLinkDto {
   @IsNotEmpty()
   title: string;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @IsString()
   @IsOptional()
   description: string;
@@ -354,4 +354,9 @@ export class PaymentRequestPayDto {
   @IsString()
   @IsNotEmpty()
   paymentRequestId: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  network: string;
 }
