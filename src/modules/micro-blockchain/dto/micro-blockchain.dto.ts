@@ -232,7 +232,7 @@ export class CreatePosSettingsDto {
   userId: string;
 
   @ApiProperty()
-  @IsUUID()
+  @IsString()
   @IsOptional()
   network: string;
 
@@ -242,7 +242,7 @@ export class CreatePosSettingsDto {
   token: string;
 
   @ApiProperty()
-  @IsUUID()
+  @IsString()
   @IsOptional()
   network_ext: string;
 
@@ -259,7 +259,7 @@ export class UpdatePosSettingsDto {
   userId: string;
 
   @ApiProperty()
-  @IsUUID()
+  @IsString()
   @IsOptional()
   network: string;
 
@@ -269,7 +269,7 @@ export class UpdatePosSettingsDto {
   token: string;
 
   @ApiProperty()
-  @IsUUID()
+  @IsString()
   @IsOptional()
   network_ext: string;
 
@@ -321,7 +321,7 @@ export class CreatePaymentRequestDto {
   userId: string;
 
   @ApiProperty()
-  @IsUUID()
+  @IsString()
   @IsOptional()
   network: string;
 
