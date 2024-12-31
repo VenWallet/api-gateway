@@ -28,6 +28,7 @@ import {
   CreatePosLinkDto,
   CreatePosSettingsDto,
   CreateSpotMarketDto,
+  GetAmountMinMaxDto,
   IsAddressDto,
   PaymentRequestPayDto,
   PreviewSpotMarketDto,
@@ -455,6 +456,24 @@ export class MicroBlockchainController {
       const { data } = await this.httpClient.request({
         method: 'POST',
         path: `pos/payment-request/pay`,
+        body,
+      });
+
+      return data;
+    } catch (error) {
+      throw new ExceptionHandler(error);
+    }
+  }
+
+  @Post('pos/payment-request/amount-min-max')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  async getAmountMinMax(@Body() body: GetAmountMinMaxDto) {
+    try {
+      const { data } = await this.httpClient.request({
+        method: 'POST',
+        path: `pos/payment-request/amount-min-max`,
         body,
       });
 

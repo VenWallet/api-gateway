@@ -360,3 +360,19 @@ export class PaymentRequestPayDto {
   @IsString()
   network: string;
 }
+
+export class GetAmountMinMaxDto {
+  @IsUUID()
+  @IsNotEmpty()
+  userId: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  network: string;
+
+  @ApiProperty()
+  @IsUUID()
+  @IsOptional()
+  token?: string;
+}
