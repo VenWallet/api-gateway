@@ -337,7 +337,7 @@ export class CreatePaymentRequestDto {
 
   @ApiProperty()
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   note: string;
 }
 
