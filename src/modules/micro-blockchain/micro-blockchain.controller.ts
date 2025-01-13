@@ -413,11 +413,11 @@ export class MicroBlockchainController {
     }
   }
 
-  @Get('pos/link')
+  @Get('pos/link/:userId')
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
-  async getPosLink(@Body('userId') userId: string) {
+  async getPosLink(@Param('userId') userId: string) {
     try {
       const { data } = await this.httpClient.request({
         method: 'GET',
