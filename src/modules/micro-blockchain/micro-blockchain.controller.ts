@@ -389,11 +389,11 @@ export class MicroBlockchainController {
     }
   }
 
-  @Patch('pos/link')
+  @Patch('pos/link/:id')
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
-  async updatePosLink(@Body() body: UpdatePosLinkDto) {
+  async updatePosLink(@Param('id') id: string, @Body() body: UpdatePosLinkDto) {
     try {
       const { userId, ...restBody } = body;
 
@@ -403,7 +403,7 @@ export class MicroBlockchainController {
 
       const { data } = await this.httpClient.request({
         method: 'PATCH',
-        path: `pos/link/${userId}`,
+        path: `pos/link/${id}`,
         body: restBody,
       });
 
