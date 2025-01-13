@@ -417,11 +417,11 @@ export class MicroBlockchainController {
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
-  async getPosLink(@Body('userId') userId: string) {
+  async getPosLinkByUserId(@Body('userId') userId: string) {
     try {
       const { data } = await this.httpClient.request({
         method: 'GET',
-        path: `pos/link/${userId}`,
+        path: `pos/link-by-user-id/${userId}`,
       });
 
       return data;
@@ -456,6 +456,23 @@ export class MicroBlockchainController {
       const { data } = await this.httpClient.request({
         method: 'GET',
         path: `pos/link/linked/${userId}`,
+      });
+
+      return data;
+    } catch (error) {
+      throw new ExceptionHandler(error);
+    }
+  }
+
+  @Get('pos/link/:id')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  async getPosLink(@Param('id') id: string) {
+    try {
+      const { data } = await this.httpClient.request({
+        method: 'GET',
+        path: `pos/link/${id}`,
       });
 
       return data;
