@@ -16,6 +16,7 @@ import {
   Query,
   BadRequestException,
   Patch,
+  Delete,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { ExceptionHandler } from 'src/helpers/handlers/exception.handler';
@@ -429,6 +430,40 @@ export class MicroBlockchainController {
     }
   }
 
+  @Delete('pos/link/:userId')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  async deletePosLink(@Param('userId') userId: string) {
+    try {
+      const { data } = await this.httpClient.request({
+        method: 'DELETE',
+        path: `pos/link/${userId}`,
+      });
+
+      return data;
+    } catch (error) {
+      throw new ExceptionHandler(error);
+    }
+  }
+
+  @Get('pos/link/linked/:userId')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  async getPosLinkLinked(@Param('userId') userId: string) {
+    try {
+      const { data } = await this.httpClient.request({
+        method: 'GET',
+        path: `pos/link/linked/${userId}`,
+      });
+
+      return data;
+    } catch (error) {
+      throw new ExceptionHandler(error);
+    }
+  }
+
   @Post('pos/payment-request')
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard)
@@ -475,6 +510,23 @@ export class MicroBlockchainController {
         method: 'POST',
         path: `pos/payment-request/amount-min-max`,
         body,
+      });
+
+      return data;
+    } catch (error) {
+      throw new ExceptionHandler(error);
+    }
+  }
+
+  @Get('pos/payment-request/:userId')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  async deletePaymentRequest(@Param('userId') userId: string) {
+    try {
+      const { data } = await this.httpClient.request({
+        method: 'GET',
+        path: `pos/payment-request/${userId}`,
       });
 
       return data;
