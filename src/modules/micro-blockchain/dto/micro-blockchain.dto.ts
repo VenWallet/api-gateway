@@ -305,6 +305,7 @@ export class PosLinkDto extends CreatePosLinkDto {
 export class UpdatePosLinkDto extends PartialType(PosLinkDto) {}
 
 export class ConnectPosLinkDto {
+  @ApiProperty()
   @IsUUID()
   @IsNotEmpty()
   userId: string;

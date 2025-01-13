@@ -373,8 +373,6 @@ export class MicroBlockchainController {
 
   @Post('pos/link/connect')
   @HttpCode(HttpStatus.OK)
-  @UseGuards(AuthGuard)
-  @ApiBearerAuth()
   async connectPosLink(@Body() body: ConnectPosLinkDto) {
     try {
       const { data } = await this.httpClient.request({
@@ -537,8 +535,6 @@ export class MicroBlockchainController {
 
   @Get('pos/payment-request/:userId')
   @HttpCode(HttpStatus.OK)
-  @UseGuards(AuthGuard)
-  @ApiBearerAuth()
   async deletePaymentRequest(@Param('userId') userId: string) {
     try {
       const { data } = await this.httpClient.request({
