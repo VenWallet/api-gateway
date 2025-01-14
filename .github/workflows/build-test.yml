@@ -12,7 +12,7 @@ jobs:
     steps:
       # 1. Chequear el código del repositorio
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       # 2. Loguearse en Docker Hub
       - name: Log in to Docker Hub
@@ -24,11 +24,11 @@ jobs:
       # 3. Construir y etiquetar la imagen de Docker
       - name: Build Docker image
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/api-gateway:dev .
-          docker tag ${{ secrets.DOCKER_USERNAME }}/api-gateway:dev ${{ secrets.DOCKER_USERNAME }}/api-gateway:${{ github.sha }}
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/api-gateway:test .
+          docker tag ${{ secrets.DOCKER_USERNAME }}/api-gateway:test ${{ secrets.DOCKER_USERNAME }}/api-gateway:${{ github.sha }}
 
       # 4. Subir la imagen a Docker Hub
       - name: Push Docker image
         run: |
-          docker push ${{ secrets.DOCKER_USERNAME }}/api-gateway:dev
+          docker push ${{ secrets.DOCKER_USERNAME }}/api-gateway:test
           docker push ${{ secrets.DOCKER_USERNAME }}/api-gateway:${{ github.sha }}
