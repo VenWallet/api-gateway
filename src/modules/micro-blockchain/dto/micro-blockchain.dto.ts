@@ -382,3 +382,15 @@ export class GetAmountMinMaxDto {
   @IsOptional()
   token?: string;
 }
+
+export class CancelLimitOrderDto {
+  @ApiProperty()
+  @IsUUID()
+  @IsNotEmpty()
+  userId: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  spotMarketId: string;
+}

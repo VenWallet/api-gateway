@@ -24,6 +24,7 @@ import { AuthGuard } from 'src/helpers/guards/auth.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { HttpClient } from 'src/shared/http/http.client';
 import {
+  CancelLimitOrderDto,
   ConnectPosLinkDto,
   CreatePaymentRequestDto,
   CreatePosLinkDto,
@@ -285,6 +286,24 @@ export class MicroBlockchainController {
       const { data } = await this.httpClient.request({
         method: 'POST',
         path: `spot-market/create-spot-market`,
+        body,
+      });
+
+      return data;
+    } catch (error) {
+      throw new ExceptionHandler(error);
+    }
+  }
+
+  @Post('cancel-limit-order')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  async cancelLimitOrder(@Body() body: CancelLimitOrderDto) {
+    try {
+      const { data } = await this.httpClient.request({
+        method: 'POST',
+        path: `spot-market/cancel-limit-order`,
         body,
       });
 
