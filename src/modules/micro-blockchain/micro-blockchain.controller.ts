@@ -313,6 +313,47 @@ export class MicroBlockchainController {
     }
   }
 
+  @Get('user-spot-markets')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  @ApiQuery({ name: 'userId', required: true, type: String, description: 'ID del usuario' })
+  @ApiQuery({ name: 'status', required: false, type: String, description: 'Estado del mercado spot' })
+  @ApiQuery({ name: 'fromNetwork', required: false, type: String, description: 'Red de origen' })
+  @ApiQuery({ name: 'toNetwork', required: false, type: String, description: 'Red de destino' })
+  @ApiQuery({ name: 'fromCoin', required: false, type: String, description: 'Moneda de origen' })
+  @ApiQuery({ name: 'toCoin', required: false, type: String, description: 'Moneda de destino' })
+  @ApiQuery({ name: 'orderType', required: false, type: String, description: 'Tipo de orden' })
+  async getUserSpotMarkets(
+    @Query('userId') userId: string,
+    @Query('status') status?: string,
+    @Query('fromNetwork') fromNetwork?: string,
+    @Query('toNetwork') toNetwork?: string,
+    @Query('fromCoin') fromCoin?: string,
+    @Query('toCoin') toCoin?: string,
+    @Query('orderType') orderType?: string,
+  ) {
+    try {
+      const { data } = await this.httpClient.request({
+        method: 'GET',
+        path: `spot-market/user-spot-markets`,
+        params: {
+          userId,
+          status,
+          fromNetwork,
+          toNetwork,
+          fromCoin,
+          toCoin,
+          orderType,
+        },
+      });
+
+      return data;
+    } catch (error) {
+      throw new ExceptionHandler(error);
+    }
+  }
+
   @Post('pos/settings')
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard)
