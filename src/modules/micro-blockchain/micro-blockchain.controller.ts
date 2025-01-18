@@ -317,7 +317,6 @@ export class MicroBlockchainController {
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
-  @ApiQuery({ name: 'userId', required: true, type: String, description: 'ID del usuario' })
   @ApiQuery({ name: 'status', required: false, type: String, description: 'Estado del mercado spot' })
   @ApiQuery({ name: 'fromNetwork', required: false, type: String, description: 'Red de origen' })
   @ApiQuery({ name: 'toNetwork', required: false, type: String, description: 'Red de destino' })
@@ -325,7 +324,7 @@ export class MicroBlockchainController {
   @ApiQuery({ name: 'toCoin', required: false, type: String, description: 'Moneda de destino' })
   @ApiQuery({ name: 'orderType', required: false, type: String, description: 'Tipo de orden' })
   async getUserSpotMarkets(
-    @Query('userId') userId: string,
+    @Body('userId') userId: string,
     @Query('status') status?: string,
     @Query('fromNetwork') fromNetwork?: string,
     @Query('toNetwork') toNetwork?: string,
