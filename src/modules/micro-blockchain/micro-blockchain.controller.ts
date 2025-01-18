@@ -45,6 +45,20 @@ import { AxiosRequestConfig } from 'axios';
 import { BooleanValidationPipe } from 'src/helpers/pipes/boolean-validate.pipe';
 import { AuthPkGuard } from 'src/helpers/guards/auth-pk.guard';
 
+export enum SpotMarketStatusEnum {
+  PENDING = 'Pendiente',
+  COMPLETED = 'Completado',
+  FAILED = 'Fallido',
+  SCHEDULED = 'Programado',
+  CANCELED = 'Cancelado',
+  PROCESSING = 'Procesando',
+}
+
+export enum OrderTypeEnum {
+  MARKET = 'MARKET',
+  LIMIT = 'LIMIT',
+}
+
 @ApiTags('micro-blockchain')
 @Controller()
 export class MicroBlockchainController {
@@ -317,12 +331,12 @@ export class MicroBlockchainController {
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
-  @ApiQuery({ name: 'status', required: false, type: String, description: 'Estado del mercado spot' })
+  @ApiQuery({ name: 'status', required: false, enum: SpotMarketStatusEnum, description: 'Estado del mercado spot' })
   @ApiQuery({ name: 'fromNetwork', required: false, type: String, description: 'Red de origen' })
   @ApiQuery({ name: 'toNetwork', required: false, type: String, description: 'Red de destino' })
   @ApiQuery({ name: 'fromCoin', required: false, type: String, description: 'Moneda de origen' })
   @ApiQuery({ name: 'toCoin', required: false, type: String, description: 'Moneda de destino' })
-  @ApiQuery({ name: 'orderType', required: false, type: String, description: 'Tipo de orden' })
+  @ApiQuery({ name: 'orderType', required: false, enum: OrderTypeEnum, description: 'Tipo de orden' })
   async getUserSpotMarkets(
     @Body('userId') userId: string,
     @Query('status') status?: string,
