@@ -554,8 +554,6 @@ export class MicroBlockchainController {
 
   @Post('pos/payment-request')
   @HttpCode(HttpStatus.OK)
-  @UseGuards(AuthGuard)
-  @ApiBearerAuth()
   async createPaymentRequest(@Body() body: CreatePaymentRequestDto) {
     try {
       const { data } = await this.httpClient.request({

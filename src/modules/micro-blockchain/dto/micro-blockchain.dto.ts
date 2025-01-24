@@ -322,6 +322,7 @@ export class ConnectPosLinkDto {
 }
 
 export class CreatePaymentRequestDto {
+  @ApiProperty()
   @IsUUID()
   @IsNotEmpty()
   userId: string;
