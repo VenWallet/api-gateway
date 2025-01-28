@@ -392,7 +392,7 @@ export class MicroBlockchainController {
         return;
       }
 
-      return data;
+      res.json(data);
     } catch (error) {
       throw new ExceptionHandler(error);
     }
