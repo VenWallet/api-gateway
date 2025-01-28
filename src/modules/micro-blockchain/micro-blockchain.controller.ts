@@ -337,6 +337,21 @@ export class MicroBlockchainController {
   @ApiQuery({ name: 'fromCoin', required: false, type: String, description: 'Moneda de origen' })
   @ApiQuery({ name: 'toCoin', required: false, type: String, description: 'Moneda de destino' })
   @ApiQuery({ name: 'orderType', required: false, enum: OrderTypeEnum, description: 'Tipo de orden' })
+  @ApiQuery({
+    name: 'startDate',
+    required: false,
+    type: String,
+    description: 'Fecha de inicio',
+    example: '2024-12-01T17:20:48.111Zs o 2024-12-01',
+  })
+  @ApiQuery({
+    name: 'endDate',
+    required: false,
+    type: String,
+    description: 'Fecha de fin',
+    example: '2024-12-01T17:20:48.111Zs o 2024-12-01',
+  })
+  @ApiQuery({ name: 'csv', required: false, type: Boolean, description: 'Exportar a CSV', example: 'true' })
   async getUserSpotMarkets(
     @Body('userId') userId: string,
     @Query('status') status?: string,
@@ -345,6 +360,9 @@ export class MicroBlockchainController {
     @Query('fromCoin') fromCoin?: string,
     @Query('toCoin') toCoin?: string,
     @Query('orderType') orderType?: string,
+    @Query('startDate') startDate?: string,
+    @Query('endDate') endDate?: string,
+    @Query('csv') csv?: boolean,
   ) {
     try {
       const { data } = await this.httpClient.request({
@@ -358,6 +376,9 @@ export class MicroBlockchainController {
           fromCoin,
           toCoin,
           orderType,
+          startDate,
+          endDate,
+          csv,
         },
       });
 
