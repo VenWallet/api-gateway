@@ -390,3 +390,35 @@ export class CancelLimitOrderDto {
   @IsNotEmpty()
   spotMarketId: string;
 }
+
+export class TransferNftDto {
+  // @ApiProperty()
+  @IsUUID()
+  @IsNotEmpty()
+  userId: string;
+
+  // @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  privateKey: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  network: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  tokenId: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  contract: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  destination: string;
+}

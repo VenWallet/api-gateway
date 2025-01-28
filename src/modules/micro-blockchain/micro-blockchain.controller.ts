@@ -38,6 +38,7 @@ import {
   PreviewSwapDto,
   SwapDto,
   TransferDto,
+  TransferNftDto,
   TransferTokenDto,
   UpdatePosLinkDto,
   UpdatePosSettingsDto,
@@ -642,6 +643,25 @@ export class MicroBlockchainController {
       const { data } = await this.httpClient.request({
         method: 'GET',
         path: `pos/payment-request/${userId}`,
+      });
+
+      return data;
+    } catch (error) {
+      throw new ExceptionHandler(error);
+    }
+  }
+
+  @Post('nft/transfer')
+  @ApiOperation({ description: 'Transfer NFT endpoint' })
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthPkGuard)
+  @ApiBearerAuth()
+  async transferNft(@Body() body: TransferNftDto) {
+    try {
+      const { data } = await this.httpClient.request({
+        method: 'POST',
+        path: `blockchain/transfer-nft`,
+        body,
       });
 
       return data;
