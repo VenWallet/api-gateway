@@ -17,6 +17,7 @@ import {
   BadRequestException,
   Patch,
   Delete,
+  Res,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { ExceptionHandler } from 'src/helpers/handlers/exception.handler';
@@ -44,6 +45,7 @@ import {
 import { AxiosRequestConfig } from 'axios';
 import { BooleanValidationPipe } from 'src/helpers/pipes/boolean-validate.pipe';
 import { AuthPkGuard } from 'src/helpers/guards/auth-pk.guard';
+import { Response } from 'express';
 
 export enum SpotMarketStatusEnum {
   PENDING = 'Pendiente',
@@ -353,6 +355,7 @@ export class MicroBlockchainController {
   })
   @ApiQuery({ name: 'csv', required: false, type: Boolean, description: 'Exportar a CSV', example: 'true' })
   async getUserSpotMarkets(
+    @Res() res: Response,
     @Body('userId') userId: string,
     @Query('status') status?: string,
     @Query('fromNetwork') fromNetwork?: string,
@@ -381,6 +384,13 @@ export class MicroBlockchainController {
           csv,
         },
       });
+
+      if (csv) {
+        res.setHeader('Content-Type', 'text/csv');
+        res.setHeader('Content-Disposition', 'attachment; filename="spot_markets.csv"');
+        res.status(HttpStatus.OK).send(data);
+        return;
+      }
 
       return data;
     } catch (error) {
