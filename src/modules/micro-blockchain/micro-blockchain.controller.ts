@@ -17,6 +17,7 @@ import {
   BadRequestException,
   Patch,
   Delete,
+  Res,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { ExceptionHandler } from 'src/helpers/handlers/exception.handler';
@@ -24,6 +25,7 @@ import { AuthGuard } from 'src/helpers/guards/auth.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { HttpClient } from 'src/shared/http/http.client';
 import {
+  CancelLimitOrderDto,
   ConnectPosLinkDto,
   CreatePaymentRequestDto,
   CreatePosLinkDto,
@@ -36,6 +38,7 @@ import {
   PreviewSwapDto,
   SwapDto,
   TransferDto,
+  TransferNftDto,
   TransferTokenDto,
   UpdatePosLinkDto,
   UpdatePosSettingsDto,
@@ -43,6 +46,21 @@ import {
 import { AxiosRequestConfig } from 'axios';
 import { BooleanValidationPipe } from 'src/helpers/pipes/boolean-validate.pipe';
 import { AuthPkGuard } from 'src/helpers/guards/auth-pk.guard';
+import { Response } from 'express';
+
+export enum SpotMarketStatusEnum {
+  PENDING = 'Pendiente',
+  COMPLETED = 'Completado',
+  FAILED = 'Fallido',
+  SCHEDULED = 'Programado',
+  CANCELED = 'Cancelado',
+  PROCESSING = 'Procesando',
+}
+
+export enum OrderTypeEnum {
+  MARKET = 'MARKET',
+  LIMIT = 'LIMIT',
+}
 
 @ApiTags('micro-blockchain')
 @Controller()
@@ -294,6 +312,93 @@ export class MicroBlockchainController {
     }
   }
 
+  @Post('cancel-limit-order')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  async cancelLimitOrder(@Body() body: CancelLimitOrderDto) {
+    try {
+      const { data } = await this.httpClient.request({
+        method: 'POST',
+        path: `spot-market/cancel-limit-order`,
+        body,
+      });
+
+      return data;
+    } catch (error) {
+      throw new ExceptionHandler(error);
+    }
+  }
+
+  @Get('user-spot-markets')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  @ApiQuery({ name: 'status', required: false, enum: SpotMarketStatusEnum, description: 'Estado del mercado spot' })
+  @ApiQuery({ name: 'fromNetwork', required: false, type: String, description: 'Red de origen' })
+  @ApiQuery({ name: 'toNetwork', required: false, type: String, description: 'Red de destino' })
+  @ApiQuery({ name: 'fromCoin', required: false, type: String, description: 'Moneda de origen' })
+  @ApiQuery({ name: 'toCoin', required: false, type: String, description: 'Moneda de destino' })
+  @ApiQuery({ name: 'orderType', required: false, enum: OrderTypeEnum, description: 'Tipo de orden' })
+  @ApiQuery({
+    name: 'startDate',
+    required: false,
+    type: String,
+    description: 'Fecha de inicio',
+    example: '2024-12-01T17:20:48.111Zs o 2024-12-01',
+  })
+  @ApiQuery({
+    name: 'endDate',
+    required: false,
+    type: String,
+    description: 'Fecha de fin',
+    example: '2024-12-01T17:20:48.111Zs o 2024-12-01',
+  })
+  @ApiQuery({ name: 'csv', required: false, type: Boolean, description: 'Exportar a CSV', example: 'true' })
+  async getUserSpotMarkets(
+    @Res() res: Response,
+    @Body('userId') userId: string,
+    @Query('status') status?: string,
+    @Query('fromNetwork') fromNetwork?: string,
+    @Query('toNetwork') toNetwork?: string,
+    @Query('fromCoin') fromCoin?: string,
+    @Query('toCoin') toCoin?: string,
+    @Query('orderType') orderType?: string,
+    @Query('startDate') startDate?: string,
+    @Query('endDate') endDate?: string,
+    @Query('csv') csv?: boolean,
+  ) {
+    try {
+      const { data } = await this.httpClient.request({
+        method: 'GET',
+        path: `spot-market/user-spot-markets`,
+        params: {
+          userId,
+          status,
+          fromNetwork,
+          toNetwork,
+          fromCoin,
+          toCoin,
+          orderType,
+          startDate,
+          endDate,
+          csv,
+        },
+      });
+
+      if (csv) {
+        res.setHeader('Content-Type', 'text/csv');
+        res.setHeader('Content-Disposition', 'attachment; filename="spot_markets.csv"');
+        res.status(HttpStatus.OK).send(data);
+        return;
+      }
+
+      res.json(data);
+    } catch (error) {
+      throw new ExceptionHandler(error);
+    }
+  }
+
   @Post('pos/settings')
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard)
@@ -481,8 +586,6 @@ export class MicroBlockchainController {
 
   @Post('pos/payment-request')
   @HttpCode(HttpStatus.OK)
-  @UseGuards(AuthGuard)
-  @ApiBearerAuth()
   async createPaymentRequest(@Body() body: CreatePaymentRequestDto) {
     try {
       const { data } = await this.httpClient.request({
@@ -540,6 +643,25 @@ export class MicroBlockchainController {
       const { data } = await this.httpClient.request({
         method: 'GET',
         path: `pos/payment-request/${userId}`,
+      });
+
+      return data;
+    } catch (error) {
+      throw new ExceptionHandler(error);
+    }
+  }
+
+  @Post('nft/transfer')
+  @ApiOperation({ description: 'Transfer NFT endpoint' })
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthPkGuard)
+  @ApiBearerAuth()
+  async transferNft(@Body() body: TransferNftDto) {
+    try {
+      const { data } = await this.httpClient.request({
+        method: 'POST',
+        path: `blockchain/transfer-nft`,
+        body,
       });
 
       return data;

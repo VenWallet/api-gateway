@@ -216,6 +216,11 @@ export class PreviewSpotMarketDto {
   @IsNotEmpty()
   @Min(0.0000001, { message: 'The amount must be greater than 0' })
   amount: number;
+
+  @ApiProperty({ required: false })
+  @IsNumber()
+  @IsOptional()
+  price?: number;
 }
 
 export class CreateSpotMarketDto extends PreviewSpotMarketDto {
@@ -317,6 +322,7 @@ export class ConnectPosLinkDto {
 }
 
 export class CreatePaymentRequestDto {
+  @ApiProperty()
   @IsUUID()
   @IsNotEmpty()
   userId: string;
@@ -376,4 +382,43 @@ export class GetAmountMinMaxDto {
   @IsUUID()
   @IsOptional()
   token?: string;
+}
+
+export class CancelLimitOrderDto {
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  spotMarketId: string;
+}
+
+export class TransferNftDto {
+  // @ApiProperty()
+  @IsUUID()
+  @IsNotEmpty()
+  userId: string;
+
+  // @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  privateKey: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  network: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  tokenId: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  contract: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  destination: string;
 }
