@@ -68,7 +68,7 @@ export class MicroBlockchainController {
   private readonly httpClient: HttpClient;
 
   constructor() {
-    this.httpClient = new HttpClient('https://app.venwallet.xyz:3000/api/');
+    this.httpClient = new HttpClient('http://micro-blockchain:3000/api/');
   }
 
   @Get('blockchain/health')
