@@ -13,6 +13,7 @@ import {
   Request,
   InternalServerErrorException,
   Query,
+  Param,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { ExceptionHandler } from 'src/helpers/handlers/exception.handler';
@@ -200,6 +201,21 @@ export class MicroCoreController {
         method: 'POST',
         path: `user/validate-otp`,
         body,
+      });
+
+      return data;
+    } catch (error) {
+      throw new ExceptionHandler(error);
+    }
+  }
+
+  @Post('user/exists/:email')
+  @HttpCode(HttpStatus.OK)
+  async userExists(@Param('email') email: string) {
+    try {
+      const { data } = await this.httpClient.request({
+        method: 'GET',
+        path: `user/exists/${email}`,
       });
 
       return data;
