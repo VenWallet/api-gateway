@@ -637,15 +637,49 @@ export class MicroBlockchainController {
   }
 
   @Get('pos/payment-request/:userId')
+  @ApiQuery({
+    name: 'startDate',
+    required: false,
+    type: String,
+    description: 'Fecha de inicio',
+    example: '2024-12-01T17:20:48.111Zs o 2024-12-01',
+  })
+  @ApiQuery({
+    name: 'endDate',
+    required: false,
+    type: String,
+    description: 'Fecha de fin',
+    example: '2024-12-01T17:20:48.111Zs o 2024-12-01',
+  })
+  @ApiQuery({ name: 'csv', required: false, type: Boolean, description: 'Exportar a CSV', example: 'true' })
   @HttpCode(HttpStatus.OK)
-  async deletePaymentRequest(@Param('userId') userId: string) {
+  async getPaymentRequest(
+    @Res() res: Response,
+    @Body('userId') userId: string,
+    @Query('startDate') startDate?: string,
+    @Query('endDate') endDate?: string,
+    @Query('csv') csv?: boolean,
+  ) {
     try {
       const { data } = await this.httpClient.request({
         method: 'GET',
         path: `pos/payment-request/${userId}`,
+        params: {
+          userId,
+          startDate,
+          endDate,
+          csv,
+        },
       });
 
-      return data;
+      if (csv) {
+        res.setHeader('Content-Type', 'text/csv');
+        res.setHeader('Content-Disposition', 'attachment; filename="spot_markets.csv"');
+        res.status(HttpStatus.OK).send(data);
+        return;
+      }
+
+      res.json(data);
     } catch (error) {
       throw new ExceptionHandler(error);
     }
