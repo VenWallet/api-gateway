@@ -665,7 +665,6 @@ export class MicroBlockchainController {
         method: 'GET',
         path: `pos/payment-request/${userId}`,
         params: {
-          userId,
           startDate,
           endDate,
           csv,
