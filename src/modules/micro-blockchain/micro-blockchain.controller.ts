@@ -655,7 +655,7 @@ export class MicroBlockchainController {
   @HttpCode(HttpStatus.OK)
   async getPaymentRequest(
     @Res() res: Response,
-    @Body('userId') userId: string,
+    @Param('userId') userId: string,
     @Query('startDate') startDate?: string,
     @Query('endDate') endDate?: string,
     @Query('csv') csv?: boolean,
@@ -665,7 +665,6 @@ export class MicroBlockchainController {
         method: 'GET',
         path: `pos/payment-request/${userId}`,
         params: {
-          userId,
           startDate,
           endDate,
           csv,
