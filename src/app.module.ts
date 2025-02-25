@@ -8,6 +8,7 @@ import { HttpCustomModule } from './shared/http/http.module';
 import { MicroBlockchainModule } from './modules/micro-blockchain/micro-blockchain.module';
 import { MicroCoreModule } from './modules/micro-core/micro-core.module';
 import { ThrottlerModule } from '@nestjs/throttler';
+import { DagroMicroMarketModule } from './modules/dagro-micro-market/dagro-micro-market.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
     HttpCustomModule,
     MicroBlockchainModule,
     MicroCoreModule,
+    DagroMicroMarketModule,
   ],
   controllers: [AppController],
   providers: [],
