@@ -124,4 +124,49 @@ export class DagroMicroMarketController {
       throw new ExceptionHandler(error);
     }
   }
+
+  @Get('product')
+  @HttpCode(HttpStatus.OK)
+  async getProducts() {
+    try {
+      const { data } = await this.httpClient.request({
+        method: 'GET',
+        path: `product`,
+      });
+
+      return data;
+    } catch (error) {
+      throw new ExceptionHandler(error);
+    }
+  }
+
+  @Get('category')
+  @HttpCode(HttpStatus.OK)
+  async getCategories() {
+    try {
+      const { data } = await this.httpClient.request({
+        method: 'GET',
+        path: `category`,
+      });
+
+      return data;
+    } catch (error) {
+      throw new ExceptionHandler(error);
+    }
+  }
+
+  @Get('packing')
+  @HttpCode(HttpStatus.OK)
+  async getPacking() {
+    try {
+      const { data } = await this.httpClient.request({
+        method: 'GET',
+        path: `packing`,
+      });
+
+      return data;
+    } catch (error) {
+      throw new ExceptionHandler(error);
+    }
+  }
 }
