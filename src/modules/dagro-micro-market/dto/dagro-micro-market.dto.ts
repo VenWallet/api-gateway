@@ -35,3 +35,55 @@ export class RegisterSaleDto {
   @IsInt()
   quantity: number;
 }
+
+export class CategoryDto {
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  name!: string;
+}
+
+export class UpdateCategoryDto {
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  name?: string;
+}
+
+export class ProductDto {
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  name!: string;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  description?: string;
+}
+
+export class UpdateProductDto {
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  name?: string;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  description?: string;
+}
+
+export class PackingDto {
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  name!: string;
+}
+
+export class UpdatePackingDto {
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  name?: string;
+}
