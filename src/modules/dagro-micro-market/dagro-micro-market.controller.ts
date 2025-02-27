@@ -15,12 +15,13 @@ import {
   Query,
   Param,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiHeader, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { ExceptionHandler } from 'src/helpers/handlers/exception.handler';
 import { AuthGuard } from 'src/helpers/guards/auth.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { HttpClient } from 'src/shared/http/http.client';
 import { RegisterInteractionDto, RegisterSaleDto } from './dto/dagro-micro-market.dto';
+import { ApiKeyGuard } from 'src/helpers/guards/api-key.guard';
 
 @ApiTags('dagro-micro-market')
 @Controller()
@@ -157,6 +158,12 @@ export class DagroMicroMarketController {
 
   @Get('packing')
   @HttpCode(HttpStatus.OK)
+  @UseGuards(ApiKeyGuard)
+  @ApiHeader({
+    name: 'x-api-key',
+    description: 'API Key required for authentication',
+    required: true,
+  })
   async getPacking() {
     try {
       const { data } = await this.httpClient.request({
