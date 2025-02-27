@@ -159,11 +159,11 @@ export class DagroMicroMarketController {
   @Get('packing')
   @HttpCode(HttpStatus.OK)
   @UseGuards(ApiKeyGuard)
-  @ApiHeader({
-    name: 'x-api-key',
-    description: 'API Key required for authentication',
-    required: true,
-  })
+  // @ApiHeader({
+  //   name: 'x-api-key',
+  //   description: 'API Key required for authentication',
+  //   required: true,
+  // })
   async getPacking() {
     try {
       const { data } = await this.httpClient.request({
