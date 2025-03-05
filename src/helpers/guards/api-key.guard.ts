@@ -5,10 +5,11 @@ dotenv.config();
 
 @Injectable()
 export class ApiKeyGuard implements CanActivate {
-  private readonly validApiKeys: string[] = ['your-api-key-1', 'your-api-key-2', 'your-api-key-3'];
+  private readonly validApiKeys: string[] = [process.env.API_KEY!];
 
   canActivate(context: ExecutionContext): boolean {
     const req: Request = context.switchToHttp().getRequest();
+
     const apiKey = req.headers['x-api-key'];
 
     if (!apiKey || !this.validApiKeys.includes(apiKey as string)) {

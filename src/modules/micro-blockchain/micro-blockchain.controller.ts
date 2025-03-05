@@ -31,6 +31,7 @@ import {
   CreatePosLinkDto,
   CreatePosSettingsDto,
   CreateSpotMarketDto,
+  FtTransferDto,
   GetAmountMinMaxDto,
   IsAddressDto,
   PaymentRequestPayDto,
@@ -694,6 +695,24 @@ export class MicroBlockchainController {
       const { data } = await this.httpClient.request({
         method: 'POST',
         path: `blockchain/transfer-nft`,
+        body,
+      });
+
+      return data;
+    } catch (error) {
+      throw new ExceptionHandler(error);
+    }
+  }
+
+  @Post('ft-transfer')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthPkGuard)
+  @ApiBearerAuth()
+  async ftTransfer(@Body() body: FtTransferDto) {
+    try {
+      const { data } = await this.httpClient.request({
+        method: 'POST',
+        path: `blockchain/ft-transfer`,
         body,
       });
 
