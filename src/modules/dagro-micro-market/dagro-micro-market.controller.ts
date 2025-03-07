@@ -431,6 +431,7 @@ export class DagroMicroMarketController {
   })
   async uploadFile(@UploadedFile() file: MulterFile) {
     try {
+      console.log(file);
       const formData = new FormData();
 
       const blob = new Blob([file.buffer], { type: file.mimetype });
@@ -475,6 +476,8 @@ export class DagroMicroMarketController {
   })
   async uploadMultiple(@UploadedFiles() files: MulterFile[]) {
     try {
+      console.log(files);
+
       const formData = new FormData();
 
       files.forEach((file) => {
