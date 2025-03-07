@@ -433,7 +433,9 @@ export class DagroMicroMarketController {
     try {
       const formData = new FormData();
 
-      formData.append('file', file.buffer, file.originalname);
+      const blob = new Blob([file.buffer], { type: file.mimetype });
+
+      formData.append('file', blob, file.originalname);
 
       const { data } = await this.httpClient.request({
         method: 'POST',
@@ -476,7 +478,8 @@ export class DagroMicroMarketController {
       const formData = new FormData();
 
       files.forEach((file) => {
-        formData.append('files', file.buffer, file.originalname);
+        const blob = new Blob([file.buffer], { type: file.mimetype });
+        formData.append('files', blob, file.originalname);
       });
 
       const { data } = await this.httpClient.request({
