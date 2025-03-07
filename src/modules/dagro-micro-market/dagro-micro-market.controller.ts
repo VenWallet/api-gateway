@@ -442,6 +442,7 @@ export class DagroMicroMarketController {
         method: 'POST',
         path: `media/upload-multiple`,
         body: formData,
+        config: { headers: { 'Content-Type': 'multipart/form-data' } },
       });
 
       if (!data) {
@@ -489,6 +490,7 @@ export class DagroMicroMarketController {
         method: 'POST',
         path: `media/upload-multiple`,
         body: formData,
+        config: { headers: { 'Content-Type': 'multipart/form-data' } },
       });
 
       if (!data) {
