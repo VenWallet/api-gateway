@@ -440,7 +440,7 @@ export class DagroMicroMarketController {
 
       const { data } = await this.httpClient.request({
         method: 'POST',
-        path: `media/upload-multiple`,
+        path: `media/upload`,
         body: formData,
         config: { headers: { 'Content-Type': 'multipart/form-data' } },
       });
