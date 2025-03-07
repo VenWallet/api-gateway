@@ -16,11 +16,21 @@ import {
   Param,
   Patch,
   Delete,
+  UploadedFiles,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiHeader, ApiOperation, ApiQuery, ApiSecurity, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiConsumes,
+  ApiHeader,
+  ApiOperation,
+  ApiQuery,
+  ApiSecurity,
+  ApiTags,
+} from '@nestjs/swagger';
 import { ExceptionHandler } from 'src/helpers/handlers/exception.handler';
 import { AuthGuard } from 'src/helpers/guards/auth.guard';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { HttpClient } from 'src/shared/http/http.client';
 import {
   CategoryDto,
@@ -33,6 +43,7 @@ import {
   UpdateProductDto,
 } from './dto/dagro-micro-market.dto';
 import { ApiKeyGuard } from 'src/helpers/guards/api-key.guard';
+import { File as MulterFile } from 'multer';
 
 @ApiTags('dagro-micro-market')
 @Controller()
@@ -394,6 +405,89 @@ export class DagroMicroMarketController {
         method: 'DELETE',
         path: `packing/${id}`,
       });
+
+      return data;
+    } catch (error) {
+      throw new ExceptionHandler(error);
+    }
+  }
+
+  @Post('media/upload')
+  @ApiOperation({ description: 'upload file' })
+  @HttpCode(HttpStatus.OK)
+  @UseInterceptors(FileInterceptor('file'))
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    description: 'Sube un archivo a DigitalOcean Spaces',
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
+  async uploadFile(@UploadedFile() file: MulterFile) {
+    try {
+      const formData = new FormData();
+
+      formData.append('file', file.buffer, file.originalname);
+
+      const { data } = await this.httpClient.request({
+        method: 'POST',
+        path: `media/upload-multiple`,
+        body: formData,
+      });
+
+      if (!data) {
+        throw new InternalServerErrorException('Failed to upload file');
+      }
+
+      return data;
+    } catch (error) {
+      throw new ExceptionHandler(error);
+    }
+  }
+
+  @Post('media/upload-multiple')
+  @ApiOperation({ description: 'upload files' })
+  @HttpCode(HttpStatus.OK)
+  @UseInterceptors(FilesInterceptor('files', 10)) // Máximo 10 archivos
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    description: 'Sube múltiples archivos a DigitalOcean Spaces',
+    schema: {
+      type: 'object',
+      properties: {
+        files: {
+          type: 'array',
+          items: {
+            type: 'string',
+            format: 'binary',
+          },
+        },
+      },
+    },
+  })
+  async uploadMultiple(@UploadedFiles() files: MulterFile[]) {
+    try {
+      const formData = new FormData();
+
+      files.forEach((file) => {
+        formData.append('files', file.buffer, file.originalname);
+      });
+
+      const { data } = await this.httpClient.request({
+        method: 'POST',
+        path: `media/upload-multiple`,
+        body: formData,
+      });
+
+      if (!data) {
+        throw new InternalServerErrorException('Failed to upload files');
+      }
 
       return data;
     } catch (error) {
