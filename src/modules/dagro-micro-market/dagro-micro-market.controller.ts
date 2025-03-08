@@ -464,6 +464,7 @@ export class DagroMicroMarketController {
   @ApiOperation({ description: 'upload files' })
   @HttpCode(HttpStatus.OK)
   @UseInterceptors(AnyFilesInterceptor())
+  @ApiConsumes('multipart/form-data')
   @ApiBody({
     description: 'Sube múltiples archivos a DigitalOcean Spaces',
     schema: {
