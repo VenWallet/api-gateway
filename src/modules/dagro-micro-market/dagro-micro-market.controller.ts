@@ -464,21 +464,21 @@ export class DagroMicroMarketController {
   @ApiOperation({ description: 'upload files' })
   @HttpCode(HttpStatus.OK)
   @UseInterceptors(AnyFilesInterceptor())
-  // @ApiBody({
-  //   description: 'Sube múltiples archivos a DigitalOcean Spaces',
-  //   schema: {
-  //     type: 'object',
-  //     properties: {
-  //       files: {
-  //         type: 'array',
-  //         items: {
-  //           type: 'string',
-  //           format: 'binary',
-  //         },
-  //       },
-  //     },
-  //   },
-  // })
+  @ApiBody({
+    description: 'Sube múltiples archivos a DigitalOcean Spaces',
+    schema: {
+      type: 'object',
+      properties: {
+        files: {
+          type: 'array',
+          items: {
+            type: 'string',
+            format: 'binary',
+          },
+        },
+      },
+    },
+  })
   async uploadMultiple(
     @UploadedFiles()
     files: MulterFile[],
