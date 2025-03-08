@@ -30,7 +30,12 @@ import {
 } from '@nestjs/swagger';
 import { ExceptionHandler } from 'src/helpers/handlers/exception.handler';
 import { AuthGuard } from 'src/helpers/guards/auth.guard';
-import { FileFieldsInterceptor, FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import {
+  AnyFilesInterceptor,
+  FileFieldsInterceptor,
+  FileInterceptor,
+  FilesInterceptor,
+} from '@nestjs/platform-express';
 import { HttpClient } from 'src/shared/http/http.client';
 import {
   CategoryDto,
@@ -458,35 +463,32 @@ export class DagroMicroMarketController {
   @Post('media/upload-multiple')
   @ApiOperation({ description: 'upload files' })
   @HttpCode(HttpStatus.OK)
-  @UseInterceptors(FileFieldsInterceptor([{ name: 'files', maxCount: 10 }])) // Máximo 10 archivos
-  @ApiConsumes('multipart/form-data')
-  @ApiBody({
-    description: 'Sube múltiples archivos a DigitalOcean Spaces',
-    schema: {
-      type: 'object',
-      properties: {
-        files: {
-          type: 'array',
-          items: {
-            type: 'string',
-            format: 'binary',
-          },
-        },
-      },
-    },
-  })
+  @UseInterceptors(AnyFilesInterceptor())
+  // @ApiBody({
+  //   description: 'Sube múltiples archivos a DigitalOcean Spaces',
+  //   schema: {
+  //     type: 'object',
+  //     properties: {
+  //       files: {
+  //         type: 'array',
+  //         items: {
+  //           type: 'string',
+  //           format: 'binary',
+  //         },
+  //       },
+  //     },
+  //   },
+  // })
   async uploadMultiple(
     @UploadedFiles()
-    files: {
-      files: MulterFile[];
-    },
+    files: MulterFile[],
   ) {
     try {
       console.log(files);
 
       const formData = new FormData();
 
-      files.files.forEach((file) => {
+      files.forEach((file) => {
         const blob = new Blob([file.buffer], { type: file.mimetype });
         formData.append('files', blob, file.originalname);
       });
